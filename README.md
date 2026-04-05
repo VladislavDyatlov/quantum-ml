@@ -1,99 +1,378 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🧠 Квантовый конструктор — API сервера
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+> REST API для гибридного квантово-классического конструктора схем, обучения моделей, анализа запутанности и бенчмаркинга.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.9%2B-blue)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-green)](https://fastapi.tiangolo.com)
 
-## Description
+## 📦 Базовый URL
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
-```bash
-$ npm install
+```
+http://localhost:3001/api
 ```
 
-## Compile and run the project
+- Все маршруты имеют префикс `/api`
+- Формат данных: `application/json`
+- Потоковые метрики обучения: **Server-Sent Events (SSE)**
 
-```bash
-# development
-$ npm run start
+---
 
-# watch mode
-$ npm run start:dev
+## 📋 Содержание
 
-# production mode
-$ npm run start:prod
+- [Проекты](#-проекты-projects)
+- [Схемы](#-схемы-circuits)
+- [Обучение](#-обучение-training)
+- [Анализ запутанности](#-анализ-запутанности-entanglement-analysis)
+- [Бенчмарки](#-бенчмарки-и-сравнение-benchmark)
+- [Вспомогательные](#-вспомогательные)
+- [Примеры запросов](#-примеры-запросов)
+- [Установка и запуск](#-установка-и-запуск)
+
+---
+
+## 📁 Проекты (Projects)
+
+### `GET /api/projects`
+Получить список всех проектов.
+
+**Ответ**:
+```json
+{
+  "projects": [
+    {
+      "id": "proj_01",
+      "name": "Исследование запутанности",
+      "description": "Тестирование GHZ-состояний",
+      "createdAt": "2025-01-15T10:00:00Z"
+    }
+  ]
+}
 ```
 
-## Run tests
+### `POST /api/projects`
+Создать новый проект.
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+**Тело**:
+```json
+{
+  "name": "Новый проект",
+  "description": "Описание (опционально)"
+}
 ```
 
-## Deployment
+**Ответ**: созданный проект с `id`.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### `GET /api/projects/:id`
+Получить детали проекта.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### `PUT /api/projects/:id`
+Обновить название или описание.
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+### `DELETE /api/projects/:id`
+Удалить проект (каскадно удаляет все связанные схемы и запуски обучения).
+
+---
+
+## 🔌 Схемы (Circuits)
+
+### `GET /api/projects/:projectId/circuits`
+Список всех схем в проекте.
+
+### `POST /api/projects/:projectId/circuits`
+Сохранить новую схему.
+
+**Тело**:
+```json
+{
+  "name": "GHZ-цепь",
+  "qubitsCount": 3,
+  "gates": [
+    { "gate": "h", "qubits": [0] },
+    { "gate": "cx", "qubits": [0, 1] },
+    { "gate": "cx", "qubits": [1, 2] }
+  ]
+}
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### `GET /api/circuits/:id`
+Получить полные данные схемы.
 
-## Resources
+### `PUT /api/circuits/:id`
+Обновить схему (например, переименовать или заменить список гейтов).
 
-Check out a few resources that may come in handy when working with NestJS:
+### `DELETE /api/circuits/:id`
+Удалить схему.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### `POST /api/circuits/:id/simulate`
+Симулировать схему для визуализации.
 
-## Support
+**Тело** (опционально):
+```json
+{
+  "shots": 1024
+}
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+**Ответ**:
+```json
+{
+  "probabilities": [0.5, 0.5, 0, ...],
+  "stateVector": [[0.707, 0], [0, 0.707], ...],
+  "blochVectors": [[0, 0, 1], ...],
+  "measurements": { "counts": { "00": 512, "11": 512 } }
+}
+```
 
-## Stay in touch
+---
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## 🧠 Обучение (Training)
 
-## License
+### `POST /api/training`
+Запустить асинхронное обучение гибридной модели.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
-# quantum-ml
+**Тело**:
+```json
+{
+  "projectId": "proj_01",
+  "circuitId": "circ_01",               // опционально, можно передать gates напрямую
+  "dataset": "MNIST",
+  "epochs": 50,
+  "learningRate": 0.01,
+  "bondDim": 10,
+  "qubitsCount": 4,
+  "gates": [...]                        // если circuitId не указан
+}
+```
+
+**Ответ**:
+```json
+{
+  "id": "train_abc123"
+}
+```
+
+### `GET /api/training/:id`
+Получить статус и текущие метрики обучения.
+
+**Ответ**:
+```json
+{
+  "id": "train_abc123",
+  "status": "running",
+  "metrics": {
+    "loss": [0.32, 0.28, ...],
+    "accuracy": [0.85, 0.88, ...]
+  },
+  "finalAccuracy": null
+}
+```
+
+### `GET /api/training/:id/events`
+**SSE-поток** — выдаёт события по мере завершения эпох.
+
+Пример сообщения:
+```
+event: epoch
+data: {"epoch": 5, "loss": 0.21, "accuracy": 0.92}
+```
+
+### `DELETE /api/training/:id`
+Остановить / отменить запущенное обучение.
+
+---
+
+## 🔬 Анализ запутанности (Entanglement Analysis)
+
+### `POST /api/analyze/entanglement`
+Вычислить метрики запутанности для схемы.
+
+**Тело** (один из вариантов):
+```json
+{ "circuitId": "circ_01" }
+```
+или
+```json
+{
+  "qubitsCount": 2,
+  "gates": [
+    { "gate": "h", "qubits": [0] },
+    { "gate": "cx", "qubits": [0, 1] }
+  ]
+}
+```
+
+**Ответ**:
+```json
+{
+  "concurrenceMatrix": [[0, 1], [1, 0]],
+  "schmidtCoefficients": [0.707, 0.707],
+  "entropy": 1.0
+}
+```
+
+### `POST /api/analyze/state`
+Анализ уже готового вектора состояния.
+
+**Тело**:
+```json
+{
+  "stateVector": [0.707, 0, 0, 0.707]
+}
+```
+
+**Ответ**:
+```json
+{
+  "blochVectors": [[0,0,1], [0,0,1]],
+  "probabilities": [0.5, 0, 0, 0.5],
+  "purity": 1.0
+}
+```
+
+---
+
+## ⚖️ Бенчмарки и сравнение (Benchmark)
+
+### `GET /api/benchmark`
+Получить предопределённые сравнительные данные (Qiskit, PennyLane и наша реализация).
+
+**Ответ**:
+```json
+{
+  "speed": {
+    "ours": 120,
+    "qiskit": 95,
+    "pennylane": 110
+  },
+  "memory": {
+    "ours": 256,
+    "qiskit": 280,
+    "pennylane": 270
+  },
+  "accuracy": {
+    "ours": 0.94,
+    "qiskit": 0.93,
+    "pennylane": 0.94
+  }
+}
+```
+
+### `POST /api/benchmark/run`
+Запустить новый бенчмарк на текущем фреймворке.
+
+**Тело**:
+```json
+{
+  "qubits": 4,
+  "depth": 10,
+  "shots": 2048
+}
+```
+
+**Ответ**:
+```json
+{
+  "timeMs": 342,
+  "memoryMb": 128,
+  "accuracy": 0.96
+}
+```
+
+---
+
+## 🛠️ Вспомогательные
+
+### `GET /api/datasets`
+Список доступных датасетов для обучения.
+
+**Ответ**:
+```json
+{
+  "datasets": ["MNIST", "FashionMNIST", "Iris", "Wine"]
+}
+```
+
+### `GET /api/health`
+Проверка работоспособности сервера.
+
+**Ответ**:
+```json
+{ "status": "ok" }
+```
+
+---
+
+## 📎 Примеры запросов
+
+### Создание проекта и схемы
+
+```bash
+curl -X POST http://localhost:3001/api/projects \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Тест","description":"Первый проект"}'
+
+curl -X POST http://localhost:3001/api/projects/proj_01/circuits \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Bell","qubitsCount":2,"gates":[{"gate":"h","qubits":[0]},{"gate":"cx","qubits":[0,1]}]}'
+```
+
+### Запуск обучения и подписка на SSE
+
+```bash
+# Запуск
+curl -X POST http://localhost:3001/api/training \
+  -H "Content-Type: application/json" \
+  -d '{"projectId":"proj_01","circuitId":"circ_01","dataset":"Iris","epochs":10,"learningRate":0.01,"bondDim":5}'
+
+# Подписка на события (используйте curl или любой SSE-клиент)
+curl -N http://localhost:3001/api/training/train_abc123/events
+```
+
+### Анализ запутанности
+
+```bash
+curl -X POST http://localhost:3001/api/analyze/entanglement \
+  -H "Content-Type: application/json" \
+  -d '{"qubitsCount":2,"gates":[{"gate":"h","qubits":[0]},{"gate":"cx","qubits":[0,1]}]}'
+```
+
+---
+
+## 🚀 Установка и запуск
+
+1. **Клонировать репозиторий**
+   ```bash
+   git clone https://github.com/your-repo/quantum-constructor-backend.git
+   cd quantum-constructor-backend
+   ```
+
+2. **Установить зависимости** (пример для Python + FastAPI)
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   ```
+
+3. **Запустить сервер**
+   ```bash
+   uvicorn main:app --reload --port 3001
+   ```
+
+4. **Проверить здоровье**
+   ```bash
+   curl http://localhost:3001/api/health
+   ```
+
+---
+
+## 📐 Примечания по реализации
+
+- Все маршруты возвращают ошибки в формате:
+  ```json
+  { "detail": "Сообщение об ошибке" }
+  ```
+- SSE-поток должен иметь заголовки `Content-Type: text/event-stream` и `Cache-Control: no-cache`.
+- Идентификаторы проектов, схем и запусков генерируются сервером (UUID или nanoID).
+- Обучение выполняется в фоновом режиме (Celery, BackgroundTasks или отдельный поток).
+- Для симуляции квантовых схем можно использовать `qiskit`, `pennylane` или `cirq`.
